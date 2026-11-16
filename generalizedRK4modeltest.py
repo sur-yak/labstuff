@@ -5,35 +5,38 @@ import pandas as pd
 
 #setting arrays and constants. Each position in the array corresponds to one oscillator
 
-lam = np.array([1, 0.1])
 ome = np.array([1, 1])
 a = np.array([1, 1])
-b = np.array([1, 0.5])
+lam = np.array([1, 2])
+b = np.array([1, 2])
 
 t = 0.01
 
+holdvalue = 1.8
+
 #r applies to x value
 alpha1_r = np.array([
-    [1, -1],
-    [1, -1]
+    [-1, -1],
+    [-1, -1]
 ])
 
-#i applies to y value to make it 2-dimensional
+#imaginary value (haven't used it yet)
 alpha1_i = np.array([
     [0, 0],
     [0, 0]
 ])
 
+#alpha2 is written as beta in literature
 alpha2_r = np.array([
-    [0, 0],
-    [0, 0]
+    [-1, -1],
+    [-1, -1]
 ])
 
 alpha2_i = np.array([
     [0, 0],
     [0, 0]
 ])
-tconn = 10
+tconn = 10.21
 #RK4
 def RK4(x, y, t_now):
     # setting up function to call for equation of each step
@@ -45,7 +48,7 @@ def RK4(x, y, t_now):
             B = np.zeros_like(y)
 
         else:
-            A = alpha1_r @ x + alpha1_i @ y
+            A = alpha1_r @ x - alpha1_i @ y
             B = alpha2_i @ x + alpha2_r @ y
 
         dxdt = (lam - b*(r2))*x - (ome + a*(r2))*y + A
@@ -75,7 +78,7 @@ def RK4(x, y, t_now):
 
     return x, y
 
-Tmax = 75.75
+Tmax = 75.5
 
 #initial values for x and y at t=0
 t_now = 0
@@ -92,7 +95,7 @@ y_values = []
 x_initial = x.copy()
 y_initial = y.copy()
 
-currentclosestvaluetokeeptat = 1.5
+currentclosestvaluetokeepat = 75.5
 
 while t_now <= Tmax:
     time_intervals.append(t_now)
@@ -100,7 +103,7 @@ while t_now <= Tmax:
     x_values.append(x.copy())
     y_values.append(y.copy())
 
-    if t_now < 1.5:
+    if t_now < holdvalue:
         x, y = RK4(x, y, t_now)
         x[1] = x_initial[1]
         y[1] = y_initial[1]
@@ -121,6 +124,7 @@ plt.xlabel("t")
 plt.ylabel("Value")
 plt.title("Oscillator x values vs. time")
 plt.ylim(-2, 2)
+plt.xlim(0, 75.5)
 plt.axvline(x=tconn, color='red', linestyle=':', label=f'Tconn = {tconn}')
 plt.legend()
 plt.grid()
