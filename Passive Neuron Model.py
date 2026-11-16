@@ -20,7 +20,7 @@ t1 = 300       # ms
 Iext = np.zeros_like(t)
 
 pulse = (t >= t0) & (t < t1)
-Iext[pulse] = 4.0  # nA
+Iext[pulse] = 1.0  # nA
 
 # Initialize membrane potential
 V = np.zeros_like(t)
