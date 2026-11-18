@@ -2,14 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Membrane parameters
-Cm = 1.0       # nF
+Cm = 1       # nF
 gL = 0.1       # µS
 EL = -65.0     # mV
 
 # Spike parameters
 V_threshold = -50.0  # mV
 V_reset = -65.0      # mV
-t_ref = 2.0          # ms
+t_ref = 2          # ms
 
 # Simulation parameters
 dt = 0.1       # ms
@@ -68,12 +68,15 @@ fig, ax = plt.subplots(2, 1, figsize=(10, 7), sharex=True)
 ax[0].plot(t, V, label="Membrane Potential")
 ax[0].axhline(V_threshold, linestyle="--", label="Threshold")
 
+xlowlimit = 0
+xuplimit = tmax
 # Mark spike times
 
 ax[0].scatter(spike_times, [V_threshold] * len(spike_times), color="red", marker="o", zorder=3)
 
 ax[0].set_ylabel("Voltage (mV)")
 ax[0].set_title("Leaky Integrate-and-Fire Neuron")
+ax[0].set_xlim(xlowlimit, xuplimit)
 ax[0].legend()
 ax[0].grid()
 
@@ -81,6 +84,7 @@ ax[0].grid()
 ax[1].plot(t, Iext, color="orange", label="Injected Current")
 ax[1].set_xlabel("Time (ms)")
 ax[1].set_ylabel("Current (nA)")
+ax[1].set_xlim(xlowlimit, xuplimit)
 ax[1].legend()
 ax[1].grid()
 
@@ -115,7 +119,7 @@ def firing_rate_graph(Ix):
                 refractory_periodx = t[i + 1] + t_ref
     return V_values, spike_timesx
 
-currents = np.arange(1, 5, 0.25)
+currents = np.arange(0, 3.5, 0.5)
 firing_rates = []
 for i in currents:
     V_values, spike_timesx = firing_rate_graph(i)
